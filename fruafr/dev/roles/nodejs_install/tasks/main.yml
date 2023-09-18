@@ -5,7 +5,7 @@
 - block:
 
   - ansible.builtin.include_role:
-      name: frua.linux.packages_snapd
+      name: fruafr.linux.snapd_install
 
   when: ansible_os_family == 'Debian'
 
