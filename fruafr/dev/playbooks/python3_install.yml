@@ -1,0 +1,10 @@
+---
+# Install Python3 environment with virtual environment
+# Author: David HEURTEVENT
+# Date : 2023-09-17
+- hosts: all
+  become: true
+  collections:
+    - fruafr.dev
+  roles:
+    - python3_install

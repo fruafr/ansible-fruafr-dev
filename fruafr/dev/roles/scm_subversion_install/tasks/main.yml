@@ -1,0 +1,25 @@
+---
+# tasks file for scm_subversion_install
+
+# Debian
+- block:
+  - name: 'Check if subversion is installed'
+    become: true
+    command: "dpkg-query -W subversion"
+    register: package
+    failed_when: package.rc > 1
+    changed_when: package.rc == 1
+
+  - block:
+    # sudo apt-get install subversion
+    - name: 'DEBIAN - Subversion SCM package'
+      become: true
+      ansible.builtin.apt:
+        pkg:
+          - subversion
+        state: latest
+    when: package.rc == 1
+
+  when: ansible_os_family == 'Debian'
+
+

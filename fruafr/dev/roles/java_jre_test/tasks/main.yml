@@ -1,0 +1,9 @@
+---
+# tasks file for java_jre_test
+
+#Check java version
+- shell: java -version
+  register: jreversion
+
+- name: java version
+  debug: var=jreversion.stderr_lines

@@ -1,0 +1,9 @@
+---
+# Test node.js install
+# Author: David HEURTEVENT
+# Date : 2023-09-18
+- hosts: all
+  collections:
+    - fruafr.dev
+  roles:
+    - nodejs_test

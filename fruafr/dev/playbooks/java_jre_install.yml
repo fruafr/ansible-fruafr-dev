@@ -1,0 +1,10 @@
+---
+# Install Default Java Runtime Environment (JRE)
+# Author: David HEURTEVENT
+# Date : 2023-09-17
+- hosts: all
+  become: true
+  collections:
+    - fruafr.dev
+  roles:
+    - java_jre_install

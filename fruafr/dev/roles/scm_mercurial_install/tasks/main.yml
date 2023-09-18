@@ -1,0 +1,25 @@
+---
+# tasks file for scm_mercurial_install
+
+# Debian
+- block:
+
+  - name: 'Check if mercurial is installed'
+    become: true
+    command: "dpkg-query -W mercurial"
+    register: package
+    failed_when: package.rc > 1
+    changed_when: package.rc == 1
+
+  - block:
+    # sudo apt-get install mercurial
+    - name: 'DEBIAN - Mercurial SCM package'
+      become: true
+      ansible.builtin.apt:
+        pkg:
+          - mercurial
+        state: latest
+    when: package.rc == 1
+
+  when: ansible_os_family == 'Debian'
+

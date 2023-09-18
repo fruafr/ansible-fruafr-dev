@@ -1,0 +1,10 @@
+---
+# Get Python3 and Pip3 versions
+# Author: David HEURTEVENT
+# Date : 2023-09-18
+- hosts: all
+  become: true
+  collections:
+    - fruafr.dev
+  roles:
+    - python3_test

@@ -1,0 +1,9 @@
+---
+# Install node.js
+# Author: David HEURTEVENT
+# Date : 2023-09-18
+- hosts: all
+  collections:
+    - fruafr.dev
+  roles:
+    - nodejs_install

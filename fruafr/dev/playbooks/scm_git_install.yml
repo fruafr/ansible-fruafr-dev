@@ -1,0 +1,10 @@
+---
+# Install Git SCM package
+# Author: David HEURTEVENT
+# Date : 2023-09-17
+- hosts: all
+  become: true
+  collections:
+    - fruafr.dev
+  roles:
+    - scm_git_install

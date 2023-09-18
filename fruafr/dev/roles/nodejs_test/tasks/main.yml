@@ -1,0 +1,9 @@
+---
+# tasks file for nodejs_test
+
+# Test node
+- shell: node -v
+  register: version
+
+- name: 'node -v'
+  debug: var=version.stdout_lines

@@ -1,0 +1,16 @@
+---
+# tasks file for python3_test
+
+#Check python3 version
+- shell: python3 --version
+  register: pyversion
+
+- name: python3 --version
+  debug: var=pyversion.stdout_lines
+
+#Check pip3 version
+- shell: pip3 --version
+  register: pip3version
+
+- name: pip3 --version
+  debug: var=pip3version.stdout_lines

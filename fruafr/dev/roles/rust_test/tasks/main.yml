@@ -1,0 +1,32 @@
+---
+# tasks file for rust_test
+
+# Test rust installation
+
+## rustc
+- shell: $HOME/.cargo/bin/rustc --version
+  register: rcversion
+  args:
+    executable: /bin/bash
+
+- name: 'rustc --version'
+  debug: var=rcversion.stdout_lines
+
+## rustup
+- shell: $HOME/.cargo/bin/rustup --version
+  register: ruversion
+  args:
+    executable: /bin/bash
+
+- name: 'rustup --version'
+  debug: var=ruversion.stdout_lines
+
+## cargo
+- shell: $HOME/.cargo/bin/cargo --version
+  register: cversion
+  args:
+    executable: /bin/bash
+
+- name: 'cargo --version'
+  debug: var=cversion.stdout_lines
+

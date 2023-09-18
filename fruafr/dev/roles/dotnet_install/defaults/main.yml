@@ -1,0 +1,22 @@
+---
+# defaults file for dotnet_install
+
+# product: The type of .NET product to install. Valid options are:
+#dotnet
+#aspnetcore
+dotnet_product: 'dotnet'
+
+#type: Chooses the SDK or the runtime. Valid options are:
+#sdk (only available for the dotnet product)
+#runtime
+dotnet_type: 'runtime'
+
+#version: The version of the SDK or runtime to install. This article will always give the instructions for the latest supported version. Valid options are any released version, such as:
+#7.0
+#6.0
+#5.0
+#3.1
+#2.1
+dotnet_version: '7.0'
+
+deb_file: '/tmp/packages-microsoft-prod.deb'

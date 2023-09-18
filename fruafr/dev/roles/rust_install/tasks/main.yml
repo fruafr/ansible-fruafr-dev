@@ -1,0 +1,44 @@
+---
+# tasks file for rust_install
+
+# install rust
+# https://waylonwalker.com/install-rust/
+
+# Debian
+- block:
+
+  - name: check if cargo is installed
+    shell: command -v cargo
+    register: cargo_exists
+    ignore_errors: true
+
+  - name: Download Installer
+    when: cargo_exists is failed
+    get_url:
+      url: https://sh.rustup.rs
+      dest: /tmp/sh.rustup.rs
+      mode: '0755'
+      force: 'yes'
+    tags:
+      - rust
+
+  - name: install rust/cargo
+    when: cargo_exists is failed
+    shell: /tmp/sh.rustup.rs -y
+    tags:
+      - rust
+
+  - name: 'Remove the tmp file'
+    ansible.builtin.file:
+      path: "/tmp/sh.rustup.rs"
+      state: absent
+
+  - shell: source /etc/environment
+    args:
+      executable: /bin/bash
+
+  - shell: '[ -f ~/.cargo/env ] && source $HOME/.cargo/env'
+    args:
+      executable: /bin/bash
+
+  when: ansible_os_family == 'Debian'

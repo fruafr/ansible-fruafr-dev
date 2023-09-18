@@ -1,0 +1,9 @@
+---
+# tasks file for go_test
+
+# Test go
+- shell: go version
+  register: version
+
+- name: 'go version'
+  debug: var=version.stdout_lines

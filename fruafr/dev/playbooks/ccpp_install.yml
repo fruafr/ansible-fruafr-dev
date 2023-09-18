@@ -1,0 +1,10 @@
+---
+# Install C/C++ development packages
+# Author: David HEURTEVENT
+# Date : 2023-09-17
+- hosts: all
+  become: true
+  collections:
+    - fruafr.dev
+  roles:
+    - ccpp_install

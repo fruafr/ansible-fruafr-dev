@@ -1,0 +1,20 @@
+---
+# tasks file for nodejs_install
+
+# Debian
+- block:
+
+  - ansible.builtin.include_role:
+      name: frua.linux.packages_snapd
+
+  when: ansible_os_family == 'Debian'
+
+#Install nodejs
+#https://snapcraft.io/install/node/debian
+
+- name: 'node --classic should be present'
+  community.general.snap:
+    name: node
+    classic: true
+    state: present
+

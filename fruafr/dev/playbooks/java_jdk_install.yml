@@ -1,0 +1,10 @@
+---
+# Install Default Java Development Kit (JDK)
+# Author: David HEURTEVENT
+# Date : 2023-09-17
+- hosts: all
+  become: true
+  collections:
+    - fruafr.dev
+  roles:
+    - java_jdk_install

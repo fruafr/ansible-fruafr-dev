@@ -1,0 +1,77 @@
+---
+# tasks file for dotnet_install
+#https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian
+
+# Debian
+- block:
+  - name: 'Check if {{ dotnet_product }}-{{ dotnet_type }}-{{ dotnet_version }} is installed'
+    command: "dpkg-query -W {{ dotnet_product }}-{{ dotnet_type }}-{{ dotnet_version }}"
+    register: package
+    failed_when: package.rc > 1
+    changed_when: package.rc == 1
+
+  #When not installed
+  - block:
+    - name: 'Deb file not present'
+      ansible.builtin.file:
+        path: "{{ deb_file }}"
+        state: absent
+
+    #wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+    - name: 'Download the deb file'
+      ansible.builtin.get_url:
+        url: "https://packages.microsoft.com/config/debian/{{ ansible_distribution_major_version }}/packages-microsoft-prod.deb"
+        dest: "{{ deb_file }}"
+        mode: '0440'
+      when: ansible_distribution == 'Debian'
+
+    #Microsoft feed
+    #wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+    - name: 'Download the deb file'
+      ansible.builtin.get_url:
+        url: "https://packages.microsoft.com/config/ubuntu/{{ ansible_distribution_version }}/packages-microsoft-prod.deb"
+        dest: "{{ deb_file }}"
+        mode: '0440'
+      when: ansible_distribution == 'Ubuntu'
+
+    #sudo dpkg -i /tmp/packages-microsoft-prod.deb
+    - name: 'Install the package'
+      ansible.builtin.apt: deb="{{ deb_file }}"
+
+    #rm /tmp/packages-microsoft-prod.deb
+    - name: 'Remove the deb file'
+      ansible.builtin.file:
+        path: "{{ deb_file }}"
+        state: absent
+
+    #sudo apt-get update && sudo apt-get install -y aspnetcore-runtime-7.0
+    - name: 'APT update and installed'
+      ansible.builtin.apt:
+        pkg:
+          - "{{ dotnet_product }}-{{ dotnet_type }}-{{ dotnet_version }}"
+        state: latest
+        update_cache: yes
+        cache_valid_time: 86400 #One day
+    when: package.rc == 1
+  when: ansible_os_family == 'Debian'
+
+# Check it is installed properly
+
+##dotnet --list-sdks
+- shell: dotnet --list-sdks
+  register: sdks
+  when: dotnet_type == "sdk"
+
+- name: 'list dotnet sdks'
+  debug: var=sdks.stdout_lines
+  when: dotnet_type == "sdk"
+
+##dotnet --list-runtimes
+- shell: dotnet --list-runtimes
+  register: runtimes
+  when: dotnet_type == "runtime"
+
+- name: 'list dotnet runtimes'
+  debug: var=runtimes.stdout_lines
+  when: dotnet_type == "runtime"
+  

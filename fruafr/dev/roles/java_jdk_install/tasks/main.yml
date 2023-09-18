@@ -1,0 +1,41 @@
+---
+# tasks file for java_jdk_install
+
+# sudo apt-get install [packages]
+# https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-do-I-install-Java-on-Ubuntu
+- name: 'Check if default-jre is installed'
+  become: true
+  command: "dpkg-query -W default-jre"
+  register: package
+  failed_when: package.rc > 1
+  changed_when: package.rc == 1
+  when: ansible_os_family == 'Debian'
+
+#When not installed
+- block:
+  - name: 'DEBIAN - Install Java Runtime / Java Development Kit'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - default-jre
+        - default-jdk
+      state: latest
+    when: ansible_os_family == 'Debian'
+
+  - name: 'Fetch JAVA_HOME'
+    shell: dirname $(dirname $(readlink -f $(which javac)))
+    register: java_home
+
+  - name: Set JAVA_HOME
+    lineinfile: 
+      dest: /etc/environment
+      state: present
+      regexp: '^JAVA_HOME'
+      line: "JAVA_HOME=\"{{ java_home.stdout_lines[0] }}\""
+
+  - shell: source /etc/environment
+    args:
+      executable: /bin/bash
+
+  when: package.rc == 1
+

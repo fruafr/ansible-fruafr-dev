@@ -1,0 +1,13 @@
+---
+# tasks file for java_jre_install
+
+# Debian
+- block:
+  # sudo apt-get install default-jre
+  - name: 'DEBIAN - Java Runtime Environment (JRE)'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - default-jre
+      state: latest
+  when: ansible_os_family == 'Debian'
