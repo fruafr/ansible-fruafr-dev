@@ -1,0 +1,9 @@
+---
+# tasks file for dotnet_test
+
+# Test dotnet
+- shell: dotnet --version
+  register: version
+
+- name: 'dotnet --version'
+  debug: var=version.stdout_lines
