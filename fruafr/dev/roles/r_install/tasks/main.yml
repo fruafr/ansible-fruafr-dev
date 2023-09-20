@@ -1,0 +1,143 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# tasks file for r_install
+
+# Install R
+# https://cran.r-project.org/
+
+# Debian/Ubuntu
+- block:
+  # Ubuntu
+  # https://cran.r-project.org/bin/linux/ubuntu/#install-r
+  # https://cran.r-project.org/bin/linux/ubuntu/fullREADME.html
+  - block:
+    # update indices
+    # sudo apt update -qq
+    # install two helper packages we need
+    # sudo apt install --no-install-recommends software-properties-common dirmngr
+    - name: APT - R - Install recommended packages
+      become: true
+      ansible.builtin.apt:
+        pkg:
+          - software-properties-common
+          - dirmngr
+        state: latest
+        update_cache: true
+        install_recommends: false
+    - block:
+      # add the signing key (by Michael Rutter) for these repos
+      # To verify key, run gpg --show-keys /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc 
+      # Fingerprint: E298A3A825C0D65DFD57CBB651716619E084DAB9
+      #wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+      #Note: Key SHA256 checksum is found to be ffa734347fd95fd7393f575448ba5e52cf3137067db77224d4857863351e4e8f
+      - name: Download signing key for the repos
+        become: true
+        ansible.builtin.get_url:
+          url: https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc
+          dest: /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+          checksum: sha256:ffa734347fd95fd7393f575448ba5e52cf3137067db77224d4857863351e4e8f
+        register: r_repo_key
+
+      # Add the R 4.0 repo from CRAN -- adjust 'focal' to 'groovy' or 'bionic' as needed
+      # sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+      - name: Add the 4.0 repo from CRAN
+        become: true
+        ansible.builtin.apt_repository:
+          repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/cran_ubuntu_key.asc] https://cloud.r-project.org/bin/linux/ubuntu {{ ansible_distribution_release }}-cran40/"
+          state: present
+          filename: cran_r_ubuntu
+        register: r_repo_present
+        when: r_repo_key is defined
+      
+      - block:
+        # sudo apt install --no-install-recommends r-base
+        - name: APT -  Install r-base
+          become: true
+          ansible.builtin.apt:
+            pkg:
+              - r-base
+            state: latest
+            update_cache: true
+            install_recommends: false
+        when: r_repo_present is defined
+
+    when: ansible_distribution == 'Ubuntu'
+
+  - block:
+    # Debian
+    # https://cran.r-project.org/bin/linux/debian/
+    - block:
+      # add the signing key for the repo
+      #gpg --keyserver keyserver.ubuntu.com --recv-key '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
+      #gpg --armor --export '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7' | sudo tee /etc/apt/trusted.gpg.d/cran_debian_key.asc
+      - name: Download signing key for the repo
+        become: true
+        ansible.builtin.apt_key:
+          keyserver: keyserver.ubuntu.com
+          id: 95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7
+        register: r_repo_key
+
+      # Add the R 4.0 repo from CRAN -- adjust 'focal' to 'groovy' or 'bionic' as needed
+      # sudo add-apt-repository "deb http://cloud.r-project.org/bin/linux/debian bookworm-cran40/"
+      - name: Add the 4.0 repo from CRAN
+        become: true
+        ansible.builtin.apt_repository:
+          repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/cran_debian_key.asc] https://cloud.r-project.org/bin/linux/debian {{ ansible_distribution_release }}-cran40/"
+          state: present
+          filename: cran_r_debian
+        register: r_repo_present
+        when: r_repo_key is defined
+      
+      - block:
+        # sudo apt install --no-install-recommends r-base
+        - name: APT -  Install r-base
+          become: true
+          ansible.builtin.apt:
+            pkg:
+              - r-base
+            state: latest
+            update_cache: true
+            install_recommends: false
+        when: r_repo_present is defined    
+    when: ansible_distribution == 'Debian'
+
+  ## COMMON ##
+  # Add CRAN third party packages repo
+  # sudo add-apt-repository ppa:c2d4u.team/c2d4u4.0+
+  - name: Add CRAN third party packages repo
+    become: true
+    ansible.builtin.apt_repository:
+      repo: ppa:c2d4u.team/c2d4u4.0+
+      state: present
+      filename: cran_r_third_party
+    register: r_third_repo_present
+
+  - block:    
+    # sudo apt install --no-install-recommends r-cran-rstan
+    - name: APT -  Install r-cran-rstan
+      become: true
+      ansible.builtin.apt:
+        pkg:
+          - r-cran-rstan
+        state: latest
+        update_cache: true
+        install_recommends: false
+
+    # sudo apt install --no-install-recommends r-cran-tidyverse
+    - name: APT -  Install r-cran-rstan
+      become: true
+      ansible.builtin.apt:
+        pkg:
+          - r-cran-rstan
+        state: latest
+        update_cache: true
+        install_recommends: false
+    when : r_third_repo_present
+
+  when: ansible_os_family == 'Debian'
+
+
+
+
+
