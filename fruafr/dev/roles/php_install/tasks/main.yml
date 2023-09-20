@@ -1,0 +1,22 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# tasks file for rust_install
+
+# Install PHP (Common, CLI + Pear)
+# https://www.php.net/manual/en/install.unix.debian.php
+
+# Debian
+- block:
+
+  # sudo apt-get install php-common php-cli php-pear
+  - name: 'APT - Install php-common php-cli php-pear'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - php-common
+        - php-cli
+        - php-pear
+      state: latest
+
+  when: ansible_os_family == 'Debian'
