@@ -1,0 +1,15 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# tasks file for rust_test
+
+# Test R install
+
+# R
+- shell: R --version
+  register: rversion
+  args:
+    executable: /bin/bash
+
+- name: 'R --version'
+  debug: var=rversion.stdout_lines

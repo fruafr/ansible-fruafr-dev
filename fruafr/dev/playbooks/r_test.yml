@@ -1,0 +1,9 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# Test R install
+- hosts: all
+  collections:
+    - fruafr.dev
+  roles:
+    - r_test
