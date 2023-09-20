@@ -1,7 +1,7 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 # Get Python3 and Pip3 versions
-# Author: David HEURTEVENT
-# Date : 2023-09-18
 - hosts: all
   become: true
   collections:

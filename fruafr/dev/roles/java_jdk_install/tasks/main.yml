@@ -1,5 +1,9 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 # tasks file for java_jdk_install
+
+# Install Default Java Development Kit (JDK)
 
 # sudo apt-get install [packages]
 # https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-do-I-install-Java-on-Ubuntu

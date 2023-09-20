@@ -1,7 +1,7 @@
 ---
-# Test Rust installation
-# Author: David HEURTEVENT
-# Date : 2023-09-18
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# Test Rust install
 - hosts: all
   collections:
     - fruafr.dev

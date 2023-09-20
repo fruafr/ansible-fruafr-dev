@@ -1,7 +1,7 @@
 ---
-# Test Java Runtime Environment (JRE)
-# Author: David HEURTEVENT
-# Date : 2023-09-18
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# Test Java Runtime Environment (JRE) install
 - hosts: all
   become: true
   collections:

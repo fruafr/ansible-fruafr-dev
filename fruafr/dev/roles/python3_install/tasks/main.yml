@@ -1,5 +1,9 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 # tasks file for python3_install
+
+# Install Python3 environment with virtual environment
 
 # Debian
 - block:

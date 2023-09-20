@@ -1,5 +1,10 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
 # tasks file for ccpp_install
+
+# Install C/C++ development packages
 
 # Debian
 - block:
