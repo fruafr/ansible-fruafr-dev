@@ -11,3 +11,10 @@
 
 - name: 'node -v'
   debug: var=version.stdout_lines
+
+# Test yarn
+- shell: yarn --version
+  register: yarn_version
+
+- name: 'yarn --version'
+  debug: var=yarn_version.stdout_lines

@@ -22,3 +22,9 @@
     classic: true
     state: present
 
+#Install yarn
+- name: Install "yarn" node.js package globally.
+  community.general.npm:
+    name: yarn
+    global: true
+
